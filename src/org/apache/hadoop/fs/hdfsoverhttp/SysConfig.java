@@ -50,18 +50,18 @@ public class SysConfig {
 		if(props == null){
 			try{
 				props = getProps(context);
-	    		ROOT_DIR = String.trim(props.getProperty("root-dir","/"));
+	    		ROOT_DIR = props.getProperty("root-dir","/").trim();
 	    		if(ROOT_DIR.endsWith(Path.SEPARATOR)){
 	    			ROOT_DIR = ROOT_DIR.substring(0,ROOT_DIR.length() - 1);
 	    		}
 	    		
-	    		HDFS_URI = String.trim(props.getProperty("hdfs-uri"));
+	    		HDFS_URI = props.getProperty("hdfs-uri").trim();
 	    		
-	    		INDEX_HTML = String.trim(props.getProperty("DirectoryIndex","index.html"));
+	    		INDEX_HTML = props.getProperty("DirectoryIndex","index.html").trim();
 	    		
-	    		README_FILE = String.trim(props.getProperty("ReadmeName"));
+	    		README_FILE = props.getProperty("ReadmeName").trim();
 	    		if(README_FILE != null)hasReadme = true;
-	    		HEADER_FILE = String.trim(props.getProperty("HeaderName",""));
+	    		HEADER_FILE = props.getProperty("HeaderName","").trim();
 	    		if(HEADER_FILE != null)hasHeader = true;
 
 			}catch(IOException e){
