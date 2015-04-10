@@ -25,6 +25,7 @@ It looks like httpd that publish the directory of local disk.
 - ReadmeName: the file name of readme that displayed in the bottom of the directory and file list page.  
 
 **default is the following:**  
+
 	hdfs-uri = hdfs://localhost:9000  
 	root-dir = /pub  
 	DirectoryIndex = index.html  
@@ -37,5 +38,6 @@ It looks like httpd that publish the directory of local disk.
 	cd hdfsoverhttp  
 	mvn package  
 
-under target directory,hdfsoverhttp-0.1.war will be created. and you would copy this file into webapps directory of tomcat.
+under target directory,hdfsoverhttp-0.1.war will be created.  
+and you would be copy this file into webapps directory of tomcat.
 
