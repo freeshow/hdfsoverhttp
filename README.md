@@ -6,7 +6,7 @@ It looks like httpd that publish the directory of local disk.
 <img src="doc/arch.jpg" />
 
 ## Screen capture of the demo site
-<img src"doc/demo.jpg" />
+<img src="doc/demo.jpg" />
 
 ## Manual
 
