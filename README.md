@@ -24,7 +24,7 @@ It looks like httpd that publish the directory of local disk.
 - HeaderName: the file name of Herder that displayed in the top of the directory and file list page.  
 - ReadmeName: the file name of readme that displayed in the bottom of the directory and file list page.  
 
-**default is the following:**  
+**default setting like as the following:**  
 
 	hdfs-uri = hdfs://localhost:9000  
 	root-dir = /pub  
