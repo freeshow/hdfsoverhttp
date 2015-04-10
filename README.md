@@ -43,4 +43,4 @@ and you would be copy this file into webapps directory of tomcat.
 
 #### Do not to build, Download an exist war file
 
-        wget https://github.com/zhuweimin1975/hdfsoverhttp/release/hdfsoverhttp-*.*.war
+        [see release list page]: /blob/master/release/
