@@ -38,9 +38,11 @@ It looks like httpd that publish the directory of local disk.
 	cd hdfsoverhttp  
 	mvn package  
 
-under target directory,hdfsoverhttp-*.*.war will be created.  
+under target directory,hdfsoverhttp-X.X.war will be created.  
 and you would be copy this file into webapps directory of tomcat.
 
 #### Do not to build, Download an exist war file
 
-[link]: https://github.com/zhuweimin1975/hdfsoverhttp/tree/master/release "See release file list page"    
+[releases list](https://github.com/zhuweimin1975/hdfsoverhttp/tree/master/release "See release file list page for download")
+
+ 
