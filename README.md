@@ -43,4 +43,4 @@ and you would be copy this file into webapps directory of tomcat.
 
 #### Do not to build, Download an exist war file
 
-        [see release list page]: /blob/master/release/
+[release]: /blob/master/release/  "See release file list page"
