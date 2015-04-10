@@ -33,7 +33,7 @@ public class SysConfig {
     private final static Logger log = LogManager.getLogger(HdfsTool.class);
 	
     private static Properties props;
-	private static String CONF_FILE = "hdfs-over-http.conf";
+    private static String CONF_FILE = "hdfs-over-http.conf";
 	static String ROOT_DIR;
 	static String HDFS_URI;
 	static String INDEX_HTML;
