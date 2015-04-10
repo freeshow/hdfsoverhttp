@@ -43,6 +43,6 @@ and you would be copy this file into webapps directory of tomcat.
 
 #### Do not to build, Download an exist war file
 
-[releases list](https://github.com/zhuweimin1975/hdfsoverhttp/tree/master/release "See release file list page for download")
+[see releases list page](https://github.com/zhuweimin1975/hdfsoverhttp/tree/master/release "")
 
  
