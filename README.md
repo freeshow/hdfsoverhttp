@@ -27,7 +27,7 @@ It looks like httpd that publish the directory of local disk.
 **default setting like as the following:**  
 
 	hdfs-uri = hdfs://localhost:9000  
-	root-dir = /pub  
+	root-dir = /  
 	DirectoryIndex = index.html  
 	ReadmeName = README.html  
 	HeaderName = HEADER.html  
