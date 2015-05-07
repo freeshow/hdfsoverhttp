@@ -29,7 +29,7 @@
 	
 	try{
 		hdfsTool = new HdfsTool(getServletContext());
-	}catch(HdfsInitException e){
+	}catch(HdfsException e){
 		response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "can't connect to hdfs");
 		return;
 	}

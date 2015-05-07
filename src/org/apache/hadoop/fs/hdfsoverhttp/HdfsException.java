@@ -18,11 +18,11 @@
 
 package org.apache.hadoop.fs.hdfsoverhttp;
 
-public class HdfsInitException extends Exception {
+public class HdfsException extends Exception {
 
 	private static final long serialVersionUID = -7906242332126139634L;
 
-	public HdfsInitException(String message) {
+	public HdfsException(String message) {
 		super(message);
 	}
 }

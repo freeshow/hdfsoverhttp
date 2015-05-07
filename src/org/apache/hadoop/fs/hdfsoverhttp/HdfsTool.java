@@ -79,16 +79,17 @@ public class HdfsTool {
 	/**
 	 * 
 	 * @param context
-	 * @throws HdfsInitException
+	 * @throws HdfsException
 	 * @throws IOException
 	 */
-	public HdfsTool(ServletContext context) throws HdfsInitException {
+	public HdfsTool(ServletContext context) throws HdfsException {
 		if (dfs == null) {
 			SysConfig.init(context);
 			dfs = getDfs(SysConfig.HDFS_URI);
 			if (dfs == null) {
-				throw new HdfsInitException("can't connect to hdfs");
+				throw new HdfsException("can't connect to hdfs");
 			}
+			
 			try {
 				ugi = UserGroupInformation.getLoginUser();
 				userName = ugi.getUserName();
@@ -116,6 +117,8 @@ public class HdfsTool {
 			log.error("hdfsUri is invalid", e);
 		} catch (IOException e) {
 			log.error("DFS Initialization error", e);
+		} catch (Exception e) {
+			log.error("unknown exception", e);
 		}
 		return null;
 	}
@@ -145,7 +148,7 @@ public class HdfsTool {
 			targetDirStatus = dfs.getFileStatus(dstPath);
 			log.debug("list files for " + dstPath);
 		} catch (ConnectException ce) {
-			log.error("hdfs's status is corrupt", ce);
+			log.error("ConnectException", ce);
 			return -9;
 		} catch (FileNotFoundException fe) {
 			log.error(dstPath + " doesn't exist");
@@ -280,10 +283,8 @@ public class HdfsTool {
 	 * @param targetFileName
 	 * @param existCheckOnly
 	 * @return error code or file status object
-	 * @throws IOException
 	 */
-	public Object checkFile(String targetDir, String targetFileName, boolean existCheckOnly)
-			throws IOException {
+	public Object checkFile(String targetDir, String targetFileName) {
 		Path targetFile = null;
 		if((targetDir).equals(Path.SEPARATOR)) {
 			targetFile = new Path(convertInvalidChar(SysConfig.ROOT_DIR + targetDir + targetFileName));
@@ -291,36 +292,35 @@ public class HdfsTool {
 			targetFile = new Path(convertInvalidChar(SysConfig.ROOT_DIR + targetDir + Path.SEPARATOR + targetFileName));
 		}
 
-		if (existCheckOnly){
-			if(!dfs.exists(targetFile))return new Integer(-2);
+		try{
+			if(!dfs.exists(targetFile)){
+				return new Integer(-1);
+			}
+		} catch (IOException ce) {
+			log.error("IOException", ce);
+			return new Integer(-2);
 		}
 		
 		// exist check
 		FileStatus targetFileStatus = null;
 		try {
 			targetFileStatus = dfs.getFileStatus(targetFile);
-		} catch (ConnectException ce) {
-			log.error("ConnectException", ce);
-			return new Integer(-2);
-		} catch (FileNotFoundException fe){
-			log.warn(fe.getMessage());
-			return new Integer(-1);
 		} catch (Exception e){
 			log.error("unkown exception:", e);
-			return new Integer(-2);
+			return new Integer(-3);
 		}
 
 		// file or directory check
 		if (targetFileStatus.isDirectory()) {
 			log.warn(targetFile.toUri().toString() + " is a directory");
-			return new Integer(-3);
+			return new Integer(-4);
 		}
 
 		// permission check
 		if (!hasReadPermission(targetFileStatus)) {
 			log.warn("PERMISSIONS: " + targetFile.toString() + " - "
 					+ " read denied");
-			return new Integer(-4);
+			return new Integer(-5);
 		}
 		return targetFileStatus;
 	}

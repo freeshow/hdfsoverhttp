@@ -171,7 +171,7 @@ public class FileDownloadServlet extends HttpServlet {
 		HdfsTool hdfsTool = null;
 		try {
 			hdfsTool = new HdfsTool(getServletContext());
-		} catch (HdfsInitException e) {
+		} catch (HdfsException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
 					"can't connect to hdfs");
 			return;
@@ -257,13 +257,13 @@ public class FileDownloadServlet extends HttpServlet {
 		HdfsTool hdfsTool = null;
 		try {
 			hdfsTool = new HdfsTool(getServletContext());
-		} catch (HdfsInitException e) {
+		} catch (HdfsException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
 
 		FileStatus targetFileStatus = null;
-		Object result = hdfsTool.checkFile(targetDir, targetFileName,false);
+		Object result = hdfsTool.checkFile(targetDir, targetFileName);
 		if (result.getClass().equals(FileStatus.class)) {
 			targetFileStatus = (FileStatus) result;
 		} else {
@@ -392,7 +392,7 @@ public class FileDownloadServlet extends HttpServlet {
 			HttpServletResponse response, String targetDir, HdfsTool hdfsTool)
 			throws Exception {
 		FileStatus targetFileStatus = null;
-		Object result = hdfsTool.checkFile(targetDir, SysConfig.INDEX_HTML,true);
+		Object result = hdfsTool.checkFile(targetDir, SysConfig.INDEX_HTML);
 		if (result.getClass().equals(FileStatus.class)) {
 			targetFileStatus = (FileStatus) result;
 			response.setContentType("text/html");
@@ -413,8 +413,13 @@ public class FileDownloadServlet extends HttpServlet {
 			} else {
 				return true;
 			}
-		} else
+		} else {
+			int errCode = (Integer) result;
+			if(errCode < -1){
+				throw new HdfsException("Connection Exception");
+			}
 			return false;
+		}
 	}
 
 }
