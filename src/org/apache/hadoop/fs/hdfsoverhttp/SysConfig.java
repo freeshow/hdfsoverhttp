@@ -50,9 +50,11 @@ public class SysConfig {
 		if (props == null) {
 			try {
 				props = getProps(context);
-				ROOT_DIR = props.getProperty("root-dir", "/").trim();
-				if (ROOT_DIR.endsWith(Path.SEPARATOR)) {
-					ROOT_DIR = ROOT_DIR.substring(0, ROOT_DIR.length() - 1);
+				ROOT_DIR = props.getProperty("root-dir", "").trim();
+				if (ROOT_DIR.equals(Path.SEPARATOR)){
+					ROOT_DIR = "";
+				} else if (ROOT_DIR.endsWith(Path.SEPARATOR)) {
+					ROOT_DIR = ROOT_DIR.substring(0,ROOT_DIR.length() - 1);
 				}
 
 				HDFS_URI = props.getProperty("hdfs-uri").trim();

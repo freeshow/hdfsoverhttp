@@ -61,7 +61,7 @@
 <pre>
 <img src="<%=contextAndServletPath%>/.icons/blank.gif" alt="[Icon]"><a href="?C=N&O=<%=orderType%>">Name</a><%=DirectoryMetaInfo.createBlankTag(nameColMaxLength - 4) %><a href="?C=M&O=<%=orderType%>">Last modified</a><%=DirectoryMetaInfo.createBlankTag(6) %><a href="?C=S&O=<%=orderType%>">Size</a><%=DirectoryMetaInfo.createBlankTag(sizeColMaxLength) %><a href="?C=D&O=<%=orderType%>">Description</a>
 <hr><%if(request.getAttribute("parentdir") != ""){
-	out.print("<img src=\"" + contextAndServletPath + "/.icons/back.gif\" alt=\"[DIR ]\"><a href=\"../\">Parent Directory</a>");
+	out.print("<img src=\"" + contextAndServletPath + "/.icons/back.gif\" alt=\"[DIR ]\">&nbsp;<a href=\"../\">Parent Directory</a>");
 	out.print(DirectoryMetaInfo.createBlankTag(nameColMaxLength + 6) + "-");
 	out.print("<br>");
 }%><%
@@ -76,7 +76,7 @@
 				+ cols[0]
 				+ "/</a>"
 				+ DirectoryMetaInfo.createBlankTag(nameColMaxLength,cols[0].getBytes().length + 1,cols[0].length() + 1);
-		out.print("<img width=\"20px\" src=\"" + contextAndServletPath + "/.icons/folder.gif\" alt=\"[DIR ]\">" + targetUrl + cols[5] + "    -   ");           
+		out.print("<img width=\"20px\" src=\"" + contextAndServletPath + "/.icons/folder.gif\" alt=\"[DIR ]\">&nbsp;" + targetUrl + cols[5] + "    -   ");           
 		out.print("<br>");
 	}
 	for (int i=0; i < fileList.size(); i++) {
@@ -92,7 +92,7 @@
 		+ cols[0]
 		+ "</a>"
 		+ DirectoryMetaInfo.createBlankTag(nameColMaxLength,cols[0].getBytes().length,cols[0].length());
-           out.print("<img width=\"20px\" src=\"" + contextAndServletPath + "/.icons/" + iconFileName + "\"  alt=\"[FILE]\">" + targetUrl +  cols[5] + "  " + cols[2]);
+           out.print("<img width=\"20px\" src=\"" + contextAndServletPath + "/.icons/" + iconFileName + "\"  alt=\"[FILE]\">&nbsp;" + targetUrl +  cols[5] + "  " + cols[2]);
    		out.print("<br>");
 	}
 %><hr>

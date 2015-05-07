@@ -137,28 +137,29 @@ public class HdfsTool {
 		}
 		targetDir = convertInvalidChar(targetDir);
 		this.targetDir = targetDir;
+		
 		Path dstPath = new Path(SysConfig.ROOT_DIR + targetDir);
 		FileStatus targetDirStatus = null;
 		// exist check
 		try {
 			targetDirStatus = dfs.getFileStatus(dstPath);
-			log.info("list files for " + dstPath);
+			log.debug("list files for " + dstPath);
 		} catch (ConnectException ce) {
 			log.error("hdfs's status is corrupt", ce);
 			return -9;
 		} catch (FileNotFoundException fe) {
-			log.info(dstPath + " doesn't exist");
+			log.error(dstPath + " doesn't exist");
 			return -1;
 		}
 
 		// check it is directory
 		if (!targetDirStatus.isDirectory()) {
-			log.info(dstPath + " is not a directory");
+			log.error(dstPath + " is not a directory");
 			return -1;
 		}
 		// check permission
 		if (!hasExecutePermission(targetDirStatus)) {
-			log.info(dstPath + ": Permission denied");
+			log.error(dstPath + ": Permission denied");
 			return -1;
 		}
 		FileStatus[] files = dfs.listStatus(dstPath);
@@ -277,36 +278,49 @@ public class HdfsTool {
 	 * 
 	 * @param targetDir
 	 * @param targetFileName
+	 * @param existCheckOnly
 	 * @return error code or file status object
 	 * @throws IOException
 	 */
-	public Object checkFile(String targetDir, String targetFileName)
+	public Object checkFile(String targetDir, String targetFileName, boolean existCheckOnly)
 			throws IOException {
-		Path targetFile = new Path(convertInvalidChar(SysConfig.ROOT_DIR
-				+ targetDir + Path.SEPARATOR + targetFileName));
-		FileStatus targetFileStatus = null;
+		Path targetFile = null;
+		if((targetDir).equals(Path.SEPARATOR)) {
+			targetFile = new Path(convertInvalidChar(SysConfig.ROOT_DIR + targetDir + targetFileName));
+		}else{
+			targetFile = new Path(convertInvalidChar(SysConfig.ROOT_DIR + targetDir + Path.SEPARATOR + targetFileName));
+		}
+
+		if (existCheckOnly){
+			if(!dfs.exists(targetFile))return new Integer(-2);
+		}
+		
 		// exist check
+		FileStatus targetFileStatus = null;
 		try {
 			targetFileStatus = dfs.getFileStatus(targetFile);
 		} catch (ConnectException ce) {
-			log.error("hdfs's status is corrupt", ce);
+			log.error("ConnectException", ce);
 			return new Integer(-2);
-		} catch (FileNotFoundException fe) {
-			log.info(targetFile + " doesn't exist");
+		} catch (FileNotFoundException fe){
+			log.warn(fe.getMessage());
 			return new Integer(-1);
+		} catch (Exception e){
+			log.error("unkown exception:", e);
+			return new Integer(-2);
 		}
 
 		// file or directory check
 		if (targetFileStatus.isDirectory()) {
-			log.info(targetFile.toUri().toString() + " is a directory");
-			return new Integer(-1);
+			log.warn(targetFile.toUri().toString() + " is a directory");
+			return new Integer(-3);
 		}
 
 		// permission check
 		if (!hasReadPermission(targetFileStatus)) {
-			log.info("PERMISSIONS: " + targetFile.toString() + " - "
+			log.warn("PERMISSIONS: " + targetFile.toString() + " - "
 					+ " read denied");
-			return new Integer(-1);
+			return new Integer(-4);
 		}
 		return targetFileStatus;
 	}
@@ -329,11 +343,11 @@ public class HdfsTool {
 				try {
 					ostream.write(buffer, 0, bytesToRead);
 				} catch (IOException e) {
-					log.info("write file "
+					log.warn("write file "
 							+ targetFileStatus.getPath()
 							+ " be aborted \n"
-							+ "ClientAbortException:  java.net.SocketException: "
-							+ e.getCause().getMessage());
+							+ "ClientAbortException:  java.net.SocketException: ",
+							e);
 					return true;
 				}
 			}
@@ -427,8 +441,8 @@ public class HdfsTool {
 					log.info("write file "
 							+ targetFileStatus.getPath()
 							+ " be aborted \n"
-							+ "ClientAbortException:  java.net.SocketException: "
-							+ e.getCause().getMessage());
+							+ "ClientAbortException:  java.net.SocketException: ",
+							e);
 					return true;
 				}
 

@@ -32,8 +32,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.Path;
+import org.apache.log4j.Logger;
 
 public class FileDownloadServlet extends HttpServlet {
+
+	static Logger log = Logger.getLogger(FileDownloadServlet.class);
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The output buffer size to use when serving resources.
@@ -248,8 +252,6 @@ public class FileDownloadServlet extends HttpServlet {
 
 		String targetFileName = targetFile.substring(targetFile
 				.lastIndexOf("/") + 1);
-		// String orginalFileName = new String(targetFileName.getBytes("UTF-8"),
-		// "ISO-8859-1");
 		String targetDir = targetFile.substring(0, targetFile.lastIndexOf("/"));
 
 		HdfsTool hdfsTool = null;
@@ -261,7 +263,7 @@ public class FileDownloadServlet extends HttpServlet {
 		}
 
 		FileStatus targetFileStatus = null;
-		Object result = hdfsTool.checkFile(targetDir, targetFileName);
+		Object result = hdfsTool.checkFile(targetDir, targetFileName,false);
 		if (result.getClass().equals(FileStatus.class)) {
 			targetFileStatus = (FileStatus) result;
 		} else {
@@ -272,7 +274,7 @@ public class FileDownloadServlet extends HttpServlet {
 					request.setAttribute("originalurl", request.getRequestURI());
 					response.sendError(HttpServletResponse.SC_NOT_FOUND);
 					break;
-				case -2:
+				default:
 					response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 					break;
 				}
@@ -390,7 +392,7 @@ public class FileDownloadServlet extends HttpServlet {
 			HttpServletResponse response, String targetDir, HdfsTool hdfsTool)
 			throws Exception {
 		FileStatus targetFileStatus = null;
-		Object result = hdfsTool.checkFile(targetDir, SysConfig.INDEX_HTML);
+		Object result = hdfsTool.checkFile(targetDir, SysConfig.INDEX_HTML,true);
 		if (result.getClass().equals(FileStatus.class)) {
 			targetFileStatus = (FileStatus) result;
 			response.setContentType("text/html");
